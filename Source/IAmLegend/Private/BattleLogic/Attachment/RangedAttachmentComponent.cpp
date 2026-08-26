@@ -139,17 +139,15 @@ void URangedAttachmentComponent::UpdateAttachmentMesh(EAttachmentSlot Attachment
 {
 	if (!OwnerWeapon || !WeaponMesh) return;
 
-	UStaticMeshComponent* TargetMeshComp = AttachmentMeshComponents.Contains(AttachmentSlot) ? AttachmentMeshComponents[AttachmentSlot] : nullptr;
+    // 현재 장착된 부착물 메쉬 추출
+	UStaticMeshComponent* TargetMeshComp = AttachmentMeshComponents.FindRef(AttachmentSlot);
 	if (!TargetMeshComp) return;
 
 	TargetMeshComp->SetStaticMesh(nullptr);
 	TargetMeshComp->SetVisibility(false);
 
-	// 현재 슬롯에 장착된 부착물이 없으면 리턴
-	if (!CurrentAttachments.Contains(AttachmentSlot)) return;
-	
 	// 현재 장착된 부착물 데이터 추출
-	UAttachmentDataAsset* AttachmentData = CurrentAttachments[AttachmentSlot];
+	UAttachmentDataAsset* AttachmentData = CurrentAttachments.FindRef(AttachmentSlot);
 	if (!AttachmentData || !AttachmentData->ItemMesh) return;
 	
 	// 부착물이 장착될 소켓이 무기에 존재하는지 확인
